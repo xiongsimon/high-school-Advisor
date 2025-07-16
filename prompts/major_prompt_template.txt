@@ -1,0 +1,12 @@
+Based on this high school student profile:
+
+Interests: {interests}
+Work Style: {work_style}
+Strengths: {strengths}
+Academic Alignment: {academic_alignment}
+
+Suggest:
+- 3 best-fit college majors
+- 2 career ideas
+
+Explain briefly in a friendly, high school–level tone. Keep it under 100 words.
