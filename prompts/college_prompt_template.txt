@@ -1,0 +1,29 @@
+Given the student's profile, suggest 2–3 college recommendations** that offer strong programs in the suggested majors and support career development in the recommended paths.
+
+Profile:
+- **Location**: {location}
+- **Budget**: {budget}
+- **Campus size**: {campus_size}
+- **Admission risk tolerance**: {admission_risk_tolerance}
+- **Class size preference**: {class_size_preference}
+- **Campus culture**: {campus_culture}
+- **Learning preference**: {learning_preference}
+- **Extracurricular interest**: {extracurricular_interest}
+- **Financial aid priority**: {financial_aid_priority}
+- **Career services importance**: {career_services_importance}
+- **Institution type**: {institution_type}
+
+
+For each suggestion:
+- Provide a brief explanation (2–3 sentences) of why this college is a good fit.
+- Mention how the student's preferences, budget, or personality align with each choice.
+
+Format:
+
+**Recommended Colleges**:  
+- [College Name 1] – [Reason or notable program]  
+- [College Name 2] – [Reason or notable program]  
+- [Optional: College Name 3] – [Reason or notable program]
+
+Please keep the tone friendly and engaging, and ensure the suggestions are realistic and feasible for a high school student.
+

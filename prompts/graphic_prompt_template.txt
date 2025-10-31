@@ -1,0 +1,24 @@
+Based on the student’s profile and selected college, assign a score from 1 to 10 for each of the following five values to reflect how well each aligns with the college’s expectations or preferences. A score of 1 means poor alignment, and 10 means excellent alignment.
+
+Use the college to inform your reasoning, but do not include the college name in the output.
+
+Profile:
+- Selected College: {college}
+- Academic Achievements: {academics}
+- Leadership: {leadership}
+- Project Experience: {project_experience}
+- Character / Passion: {passion}
+- Awards & Recognition: {awards}
+
+Return the results in this exact format:
+
+- **Academic Achievements**: [number]  
+  Reason: (1–2 sentences)  
+- **Leadership**: [number]  
+  Reason: (1–2 sentences)  
+- **Project Experience**: [number]  
+  Reason: (1–2 sentences)  
+- **Character / Passion**: [number]  
+  Reason: (1–2 sentences)  
+- **Awards & Recognition**: [number]  
+  Reason: (1–2 sentences)

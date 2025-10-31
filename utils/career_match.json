@@ -1,0 +1,76 @@
+[
+  {
+    "key": "interests",
+    "question": "Which activities or subjects excite you the most?",
+    "options": [
+      "Creative pursuits (e.g., art, writing, music)",
+      "Problem-solving or analytical tasks (e.g., math, science, puzzles)",
+      "Helping or working with people (e.g., teaching, volunteering)",
+      "Hands-on or practical activities (e.g., building, fixing things)",
+      "Other: (please specify)"
+    ]
+  },
+  {
+    "key": "personality",
+    "question": "How would you describe your personality?",
+    "options": [
+      "Outgoing and social",
+      "Analytical and logical",
+      "Creative and imaginative",
+      "Detail-oriented and organized",
+      "Other/a mixture: (please specify)"
+    ]
+  },
+  {
+    "key": "work_style",
+    "question": "What type of work environment do you prefer?",
+    "options": [
+      "Working alone",
+      "Working with a team",
+      "A mix of independent and team work",
+      "Leading or managing others"
+    ]
+  },
+  {
+    "key": "workplace_setting",
+    "question": "What kind of workplace setting appeals to you?",
+    "options": [
+      "Indoors (e.g., office, lab)",
+      "Outdoors (e.g., nature, construction sites)",
+      "Traveling or on-the-go",
+      "Flexible or remote work"
+    ]
+  },
+  {
+    "key": "academic_alignment",
+    "question": "Which issues or causes matter most to you?",
+    "options": [
+      "Environment and sustainability",
+      "Technology and innovation",
+      "Helping people or communities",
+      "Arts, culture, or entertainment",
+      "Other (please specify)"
+    ]
+  },
+  {
+    "key": "comfort_with_risk",
+    "question": "How comfortable are you with risk or uncertainty in work?",
+    "options": [
+      "Very comfortable (enjoy challenges and unpredictability)",
+      "Somewhat comfortable (okay with occasional uncertainty)",
+      "Prefer stability and predictable tasks",
+      "Not sure"
+    ]
+  },
+  {
+    "key": "strengths",
+    "question": "Which skills do you feel you’re naturally good at?",
+    "options": [
+      "Problem-solving or critical thinking",
+      "Communicating or connecting with people",
+      "Creating or designing (e.g., art, products, solutions)",
+      "Organizing or managing tasks and details",
+      "Other (please specify)"
+    ]
+  }
+]

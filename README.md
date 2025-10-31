@@ -8,3 +8,5 @@ This project provides an AI-powered advisor to help high school students plan th
 - College and major matching
 - Career guidance using AI language models
 - Streamlit UI for student interaction
+- Setup Chatgpt API Key
+- export OPENAI_API_KEY=sk-your-key-here

@@ -1,12 +1,27 @@
-Based on this high school student profile:
+Given the student's profile, suggest:
 
-Interests: {interests}
-Work Style: {work_style}
-Strengths: {strengths}
-Academic Alignment: {academic_alignment}
+- **3 best-fit college majors** that align with their interests, strengths, personality, and preferred work environment.
+- **2 career ideas** that match their academic alignment, comfort with risk, and skills.
 
-Suggest:
-- 3 best-fit college majors
-- 2 career ideas
+Profile:
+- **Interests**: {interests}
+- **Personality**: {personality}
+- **Work Style**: {work_style}
+- **Strengths**: {strengths}
+- **Academic Alignment**: {academic_alignment}
+- **Preferred Workplace Setting**: {workplace_setting}
+- **Comfort with Risk**: {comfort_with_risk}
 
-Explain briefly in a friendly, high school–level tone. Keep it under 100 words.
+For each suggestion:
+- Provide a brief explanation (2–3 sentences) of why this major or career is a good fit.
+- Mention how the student's preferences, skills, or personality align with each choice.
+
+Format:
+
+1. **Major**: [Major Name]  
+   - Why it's a good fit: [Reason]
+
+2. **Career**: [Career Idea]  
+   - Why it's a good fit: [Reason]
+
+Please keep the tone friendly and engaging, and ensure the suggestions are realistic and feasible for a high school student.

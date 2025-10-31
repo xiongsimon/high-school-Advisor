@@ -1,0 +1,32 @@
+[
+    {
+        "key": "college",
+        "question": "What is your target college/university?",
+        "options": []
+    },
+    {
+        "key": "academics",
+        "question": "How would you describe your academic performance and the subjects you excel in?",
+        "options": []
+    },
+    {
+        "key": "leadership",
+        "question": "Can you describe any leadership roles you have held in school, clubs, or community activities?",
+        "options": []
+    },
+    {
+        "key": "project_experience",
+        "question": "Tell us about a significant project you have completed, either individually or as part of a team.",
+        "options": []
+    },
+    {
+        "key": "passion",
+        "question": "What are you most passionate about, and how have you pursued this interest outside of school?",
+        "options": []
+    },
+    {
+        "key": "awards",
+        "question": "Have you received any awards or honors? Please list those related to academics, extracurricular activities, or community service",
+        "options": []
+    }
+]

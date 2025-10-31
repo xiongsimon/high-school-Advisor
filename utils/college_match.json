@@ -1,0 +1,57 @@
+[
+  {
+    "key": "location",
+    "question": "What area do you want your school to be in?",
+    "options": []
+  },
+  {
+    "key": "budget",
+    "question": "What is your budget?",
+    "options": []
+  },
+  {
+    "key": "campus_size",
+    "question": "What size campus do you prefer?",
+    "options": ["Small (<5,000 students)", "Medium (5,000–15,000 students)", "Large (>15,000 students)", "No preference"]
+  },
+  {
+    "key": "admission_risk_tolerance",
+    "question": "Do you want to aim for more competitive schools or safer options?",
+    "options": ["Reach schools (harder to get into)", "Match schools (good fit)", "Safety schools (easier to get into)", "Other"]
+  },
+  {
+    "key": "class_size_preference",
+    "question": "What kind of class sizes do you prefer?",
+    "options": ["Small (fewer than 20 students)", "Medium (20–50 students)", "Large lectures", "No preference"]
+  },
+  {
+    "key": "campus_culture",
+    "question": "What kind of campus environment appeals to you?",
+    "options": ["Social and active", "Academic and focused", "Supportive and inclusive", "Religious or values-driven", "Other"]
+  },
+  {
+    "key": "learning_preference",
+    "question": "What kind of learning environment do you prefer?",
+    "options": ["Hands-on and practical", "Lecture-based", "Research-oriented", "Collaborative/team-based", "Other"]
+  },
+  {
+    "key": "extracurricular_interest",
+    "question": "What types of extracurriculars matter to you?",
+    "options": ["Sports", "Clubs and student orgs", "Study abroad", "Community service", "Arts and performance", "Other"]
+  },
+  {
+    "key": "financial_aid_priority",
+    "question": "How important is financial aid, scholarships, or work-study programs?",
+    "options": ["Very important", "Somewhat important", "Not important"]
+  },
+  {
+    "key": "career_services_importance",
+    "question": "How important are internship and career services to you?",
+    "options": ["Very important", "Somewhat important", "Not important"]
+  },
+  {
+    "key": "institution_type",
+    "question": "Do you have a preference for the type of institution?",
+    "options": ["Public university", "Private college", "Community college", "Religious-affiliated", "No preference"]
+  }
+]

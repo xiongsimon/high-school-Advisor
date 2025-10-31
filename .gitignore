@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env
+*.log
+*.pdf
+
+# VSCode
+.vscode/
+
+# API Keys
+*.key
