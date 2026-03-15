@@ -1,4 +1,4 @@
-import openai
+import google.generativeai as genai
 import os
 import json
 from pathlib import Path
@@ -9,34 +9,38 @@ from reportlab.pdfgen import canvas
 from datetime import datetime
 import textwrap
 import sys
-#import matplotlib.pyplot as plt
 import platform
+import matplotlib.pyplot as plt
+import numpy as np
 from utils.prompt_builder import *
 
-
 # === CONFIG ===
-OPENAI_MODEL = "gpt-4"
+GEMINI_MODEL = "gemini-2.5-pro"
 DONE_KEYWORD = "done"
 OTHER_KEYWORD = "Other"
 
 # === LOGGING SETUP ===
 log_stream = io.StringIO()
-original_stdout = sys.stdout
-sys.stdout = log_stream  # capture all print output
+original_stdout = sys.stdout  # keep reference to terminal
 
 def logged_input(prompt):
     """Input that logs both prompt and user response."""
-    print(prompt, end="", flush=True)
-    log_stream.write(prompt + "\n")
-    user_input = input()
-    log_stream.write(user_input + "\n")
+    print(prompt, end="", flush=True, file=original_stdout)  # show prompt to user
+    log_stream.write(prompt + "\n")  # log the prompt
+    user_input = input()  # read user input from terminal
+    log_stream.write(user_input + "\n")  # log user input
     return user_input
 
-# === OPENAI KEY CHECK ===
-api_key = os.getenv("OPENAI_API_KEY")
+def user_print(*args, **kwargs):
+    """Print to terminal and log everything."""
+    print(*args, **kwargs, file=original_stdout)
+    log_stream.write(" ".join(str(a) for a in args) + "\n")
+
+# === GEMINI KEY CHECK ===
+api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
-    raise RuntimeError("Missing OPENAI_API_KEY environment variable")
-openai.api_key = api_key
+    raise RuntimeError("Missing GEMINI_API_KEY environment variable")
+genai.configure(api_key=api_key)
 
 # === CLI FUNCTIONS ===
 def get_choice(prompt, options):
@@ -79,51 +83,76 @@ def ask_questions(json_file, profile):
         profile[q["key"]] = get_choice(q["question"], q["options"])
     return profile
 
-def query_gpt(template_file, profile):
-    """Build prompt from template + profile and query GPT."""
+def query_gemini(template_file, profile):
+    """Build prompt from template + profile and query Gemini."""
     with open(template_file) as f:
         template = f.read()
-    prompt = build_prompt(template, profile)  # from utils.prompt_builder
+    prompt = build_prompt(template, profile)
     print(prompt)
 
     try:
-        response = openai.chat.completions.create(
-            model=OPENAI_MODEL,
-            messages=[
-                {"role": "system", "content": "You are a college guidance counselor."},
-                {"role": "user", "content": prompt}
-            ]
-        )
+        response = genai.GenerativeModel(GEMINI_MODEL).generate_content(prompt)
     except Exception as e:
-        print(f"❌ OpenAI API error: {e}")
+        print(f"❌ Gemini API error: {e}")
         return ""
 
-    output = response.choices[0].message.content
+    output = response.text
     print("\n> 🔍 Analyzing your profile...\n")
     print(output)
     return output
 
+def query_geminibpc(template_file, profile):
+    """Build prompt from template + profile and query Gemini."""
+    with open(template_file) as f:
+        template = f.read()
+    prompt = bpc(template, profile)
+    print(prompt)
+
+    try:
+        response = genai.GenerativeModel(GEMINI_MODEL).generate_content(prompt)
+    except Exception as e:
+        print(f"❌ Gemini API error: {e}")
+        return ""
+
+    output = response.text
+    print("\n> 🔍 Analyzing your profile...\n")
+    print(output)
+    return output
+
+# === RADAR CHART ===
 def generate_radar_chart(scores, filename="radar_chart.png"):
     """Generates and saves a radar chart given a dict of scores."""
     categories = list(scores.keys())
     values = list(scores.values())
 
-    # Close the radar chart loop
+    # Close radar chart loop
     values += values[:1]
-    angles = [n / float(len(categories)) * 2 * 3.14159 for n in range(len(categories))]
+    N = len(categories)
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
     angles += angles[:1]
 
+    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+    ax.plot(angles, values, linewidth=2, linestyle="solid")
+    ax.fill(angles, values, alpha=0.3)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories)
+    ax.set_yticks(range(0, 11, 2))
+    ax.set_yticklabels(map(str, range(0, 11, 2)))
+    ax.set_ylim(0, 10)
+    ax.set_title("College Alignment Radar Chart", size=14, pad=20)
+
+    plt.tight_layout()
+    plt.savefig(filename, dpi=150)
+    plt.close()
+    print(f"📈 Radar chart saved as {filename}")
+    return filename
 
 def radar_chart_phase(profile):
-    """
-    Uses the radar prompt template to get 5 scores + reasoning from GPT,
-    then generates a radar chart from the scores.
-    """
-    # Load your radar chart scoring template
+    """Uses Gemini to score 5 dimensions and generate a radar chart."""
     with open("prompts/radar_prompt_template.txt") as f:
         template = f.read()
 
-    # Fill in the template with profile data
     prompt = template.format(
         college=", ".join(profile.get("college", [])),
         academics=", ".join(profile.get("academics", [])),
@@ -134,42 +163,41 @@ def radar_chart_phase(profile):
     )
 
     try:
-        response = openai.chat.completions.create(
-            model=OPENAI_MODEL,
-            messages=[
-                {"role": "system", "content": "You are an expert in U.S. college admissions and can assess how a student's achievements align with a college's expectations."},
-                {"role": "user", "content": prompt}
-            ]
-        )
+        response = genai.GenerativeModel(GEMINI_MODEL).generate_content(prompt)
     except Exception as e:
-        print(f"❌ OpenAI API error: {e}")
+        print(f"❌ Gemini API error: {e}")
         return
 
-    output = response.choices[0].message.content
-    print("\n> 📊 GPT alignment scores & reasoning:\n")
+    output = response.text
+    print("\n> 📊 Gemini alignment scores & reasoning:\n")
     print(output)
 
-    # Extract numbers for radar chart
+    # Extract scores
     pattern = r"\*\*(?:Academic Achievements|Leadership|Project Experience|Character / Passion|Awards & Recognition)\*\*: (\d+)"
     matches = re.findall(pattern, output)
-    categories = ["Academic Achievements", "Leadership", "Project Experience", "Character / Passion", "Awards & Recognition"]
+    categories = [
+        "Academic Achievements",
+        "Leadership",
+        "Project Experience",
+        "Character / Passion",
+        "Awards & Recognition",
+    ]
 
     if len(matches) != len(categories):
-        print("⚠️ Could not parse all scores from GPT output.")
+        print("⚠️ Could not parse all scores from Gemini output.")
         return
 
     scores = {cat: int(score) for cat, score in zip(categories, matches)}
-    generate_radar_chart(scores, filename="college_alignment_radar.png")
-
+    chart_file = generate_radar_chart(scores, filename="college_alignment_radar.png")
+    return chart_file
 
 def extract_majors(text):
-    """Extract majors from GPT output using regex."""
     pattern = r"\d+\.\s*\*?Major\*?:\s*(.+)"
     return re.findall(pattern, text)
 
-def save_log_to_pdf(filename):
-    """Save full log output to PDF."""
-    sys.stdout = original_stdout  # restore stdout
+def save_log_to_pdf(filename, image_path=None):
+    """Save all terminal interactions and optionally embed an image."""
+    sys.stdout = original_stdout
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_text = f"Session started: {timestamp}\n\n" + log_stream.getvalue()
 
@@ -180,24 +208,29 @@ def save_log_to_pdf(filename):
     for line in log_text.splitlines():
         for wrapped_line in textwrap.wrap(line, width=90):
             text_obj.textLine(wrapped_line)
-            if text_obj.getY() < 40:
+            if text_obj.getY() < 150:
                 c.drawText(text_obj)
+                if image_path and os.path.exists(image_path):
+                    c.drawImage(image_path, 150, 50, width=300, preserveAspectRatio=True, mask='auto')
+                    image_path = None
                 c.showPage()
                 text_obj = c.beginText(40, 750)
                 text_obj.setFont("Courier", 9)
 
     c.drawText(text_obj)
+    if image_path and os.path.exists(image_path):
+        c.drawImage(image_path, 150, 50, width=300, preserveAspectRatio=True, mask='auto')
+
     c.save()
     print(f"\n📄 All interactions logged to {filename}")
 
-# === MAIN RUN FLOW ===
+# === MAIN FLOW ===
 if __name__ == "__main__":
-    print("Welcome to MajorMatch CLI!\n")
+    print("\nWelcome to MajorMatch CLI (Gemini Edition)!\n")
 
-    # Phase 1: Majors
     profile = {}
     ask_questions("utils/career_match.json", profile)
-    major_text = query_gpt("prompts/major_prompt_template.txt", profile)
+    major_text = query_gemini("prompts/major_prompt_template.txt", profile)
     majors = extract_majors(major_text)
     personality = profile.get("personality", [])
 
@@ -205,19 +238,12 @@ if __name__ == "__main__":
         save_log_to_pdf("session_log.pdf")
         exit()
 
-    # Phase 2: Colleges
-    college_profile = {"major": majors, "personality": personality}
     ask_questions("utils/college_match.json", college_profile)
-    query_gpt("prompts/college_prompt_template.txt", college_profile)
+    query_geminibpc("prompts/college_prompt_template.txt", college_profile)
 
-
-    # Phase 3: Radar Chart of College Alignment
     if logged_input("\nGenerate radar chart showing how well you align with your target college's expectations? (Enter to continue): ") != "":
         save_log_to_pdf("session_log.pdf")
         exit()
 
-    radar_chart_phase(college_profile)
-
-
-    # Save session log
-    save_log_to_pdf("session_log.pdf")
+    chart_file = radar_chart_phase(college_profile)
+    save_log_to_pdf("session_log.pdf", image_path=chart_file)
